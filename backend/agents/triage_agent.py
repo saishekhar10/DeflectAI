@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 import anthropic
 from dotenv import load_dotenv
@@ -74,12 +75,25 @@ Customer profile:
 - Account age: {profile.account_age_months} months
 - Open tickets: {profile.open_ticket_count}"""
 
-    response = _client.messages.create(
-        model="claude-sonnet-4-20250514",
-        max_tokens=512,
-        system=_SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": user_message}],
-    )
+    last_err = None
+    for attempt in range(4):
+        try:
+            response = _client.messages.create(
+                model="claude-sonnet-4-20250514",
+                max_tokens=512,
+                system=_SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": user_message}],
+            )
+            break
+        except anthropic.APIStatusError as e:
+            if e.status_code == 529:
+                wait = 2 ** attempt * 3
+                time.sleep(wait)
+                last_err = e
+            else:
+                raise
+    else:
+        raise last_err
 
     raw = response.content[0].text.strip()
 

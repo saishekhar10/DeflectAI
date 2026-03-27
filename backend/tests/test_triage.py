@@ -1,5 +1,6 @@
 import json
 import sys
+import time
 from pathlib import Path
 
 from backend.agents.triage_agent import triage
@@ -29,6 +30,9 @@ def run_tests():
             ok = False
             actual_routing = set()
             output = None
+            print(f"  [ERROR] #{i:02d}: {e}")
+
+        time.sleep(0.5)
 
         status = "PASS" if ok else "FAIL"
         if ok:
