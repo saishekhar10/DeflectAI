@@ -1,0 +1,422 @@
+[
+  {
+    "ticket_text": "Hi, I was charged $299 this month but I downgraded to the $49 Starter plan last week. Can you please refund the difference? I have the confirmation email if you need it.",
+    "customer_profile": {
+      "customer_id": "cus_001",
+      "name": "Sarah Chen",
+      "email": "sarah@acme.com",
+      "plan": "starter",
+      "account_age_months": 14,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["billing"],
+    "expected_routing": ["billing_agent"]
+  },
+  {
+    "ticket_text": "I was double charged last month — my credit card statement shows two transactions of $99 each on the 3rd and the 4th. This is the second time this has happened. I need both charges refunded immediately.",
+    "customer_profile": {
+      "customer_id": "cus_002",
+      "name": "Marcus Webb",
+      "email": "marcus@webb.io",
+      "plan": "pro",
+      "account_age_months": 7,
+      "tier": "standard",
+      "open_ticket_count": 1
+    },
+    "expected_intents": ["billing"],
+    "expected_routing": ["billing_agent"]
+  },
+  {
+    "ticket_text": "I cancelled my subscription 3 weeks ago and you still charged my card $149. I have the cancellation confirmation number: CX-48291. Please process the refund.",
+    "customer_profile": {
+      "customer_id": "cus_003",
+      "name": "Priya Nair",
+      "email": "priya@nair.dev",
+      "plan": "free",
+      "account_age_months": 22,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["billing"],
+    "expected_routing": ["billing_agent"]
+  },
+  {
+    "ticket_text": "My invoice for this month shows $499 but our contract says $399/month for the first year. We're only 8 months into the contract so this seems like an error. Who can I talk to about getting this corrected?",
+    "customer_profile": {
+      "customer_id": "cus_004",
+      "name": "David Kowalski",
+      "email": "david@buildfast.co",
+      "plan": "pro",
+      "account_age_months": 8,
+      "tier": "high_value",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["billing"],
+    "expected_routing": ["billing_agent"]
+  },
+  {
+    "ticket_text": "Hey, I'm trying to upgrade from the Free plan to Pro but whenever I enter my card details and hit 'Subscribe', I get a red error saying 'Payment failed' with no other info. I've tried two different cards.",
+    "customer_profile": {
+      "customer_id": "cus_005",
+      "name": "Keiko Tanaka",
+      "email": "keiko@tanaka.jp",
+      "plan": "free",
+      "account_age_months": 3,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["billing"],
+    "expected_routing": ["billing_agent"]
+  },
+  {
+    "ticket_text": "I just noticed my account is still on the Enterprise plan even though I requested a downgrade to Pro two weeks ago. I've been overcharged by $800 for the billing cycle. When will this be fixed?",
+    "customer_profile": {
+      "customer_id": "cus_006",
+      "name": "Angela Reyes",
+      "email": "angela@reyes-consulting.com",
+      "plan": "enterprise",
+      "account_age_months": 18,
+      "tier": "high_value",
+      "open_ticket_count": 2
+    },
+    "expected_intents": ["billing"],
+    "expected_routing": ["billing_agent"]
+  },
+  {
+    "ticket_text": "Our team was billed for 15 seats but we only have 9 active users. We've been paying for 6 ghost seats for the past 3 months. Can you issue a credit for the overpayment?",
+    "customer_profile": {
+      "customer_id": "cus_007",
+      "name": "Tom Fitzgerald",
+      "email": "tom@opslane.com",
+      "plan": "pro",
+      "account_age_months": 30,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["billing"],
+    "expected_routing": ["billing_agent"]
+  },
+  {
+    "ticket_text": "I received an invoice for an annual plan but I never agreed to annual billing. I signed up for monthly. The amount charged is $1,188 instead of the $99/month I expected. Please reverse this charge.",
+    "customer_profile": {
+      "customer_id": "cus_008",
+      "name": "Rachel Moore",
+      "email": "rachel@moorevibes.com",
+      "plan": "pro",
+      "account_age_months": 2,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["billing"],
+    "expected_routing": ["billing_agent"]
+  },
+  {
+    "ticket_text": "Our Slack integration stopped working yesterday around 2pm EST. No notifications are coming through to our #support channel. The connection shows as 'Active' in settings but nothing is being delivered. We rely on this heavily.",
+    "customer_profile": {
+      "customer_id": "cus_009",
+      "name": "James Liu",
+      "email": "james@pushpanda.io",
+      "plan": "pro",
+      "account_age_months": 11,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["technical"],
+    "expected_routing": ["technical_agent"]
+  },
+  {
+    "ticket_text": "The CSV export feature is completely broken. When I click 'Export', the file downloads but it's always empty — 0 rows, just headers. This worked fine last week. I need this for my weekly report due Friday.",
+    "customer_profile": {
+      "customer_id": "cus_010",
+      "name": "Olivia Grant",
+      "email": "olivia@grantanalytics.com",
+      "plan": "pro",
+      "account_age_months": 6,
+      "tier": "standard",
+      "open_ticket_count": 1
+    },
+    "expected_intents": ["technical"],
+    "expected_routing": ["technical_agent"]
+  },
+  {
+    "ticket_text": "I'm getting a 500 error every time I try to use the API endpoint POST /v2/issues. It was working fine until this morning. I'm seeing this across all environments — dev, staging, and prod. This is blocking our entire pipeline.",
+    "customer_profile": {
+      "customer_id": "cus_011",
+      "name": "Ethan Brooks",
+      "email": "ethan@flowlab.dev",
+      "plan": "pro",
+      "account_age_months": 9,
+      "tier": "high_value",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["technical"],
+    "expected_routing": ["technical_agent"]
+  },
+  {
+    "ticket_text": "The GitHub integration isn't syncing commits to issues anymore. I set it up last month and it worked perfectly, but as of Tuesday no commits are being linked. I've tried disconnecting and reconnecting the integration.",
+    "customer_profile": {
+      "customer_id": "cus_012",
+      "name": "Nina Patel",
+      "email": "nina@devsprints.co",
+      "plan": "starter",
+      "account_age_months": 5,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["technical"],
+    "expected_routing": ["technical_agent"]
+  },
+  {
+    "ticket_text": "Keyboard shortcuts have stopped working in the web app. Specifically 'C' to create an issue and 'G then I' to go to inbox. I've tested in Chrome and Safari, both same result. My teammate is having the same issue.",
+    "customer_profile": {
+      "customer_id": "cus_013",
+      "name": "Carlos Mendez",
+      "email": "carlos@loopteam.io",
+      "plan": "pro",
+      "account_age_months": 20,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["technical"],
+    "expected_routing": ["technical_agent"]
+  },
+  {
+    "ticket_text": "We can't import our Jira project. The import gets to 78% and then hangs indefinitely. I've tried 3 times over the past two days and it never completes. We have about 2,400 issues to migrate.",
+    "customer_profile": {
+      "customer_id": "cus_014",
+      "name": "Yuki Hamada",
+      "email": "yuki@agilebridge.jp",
+      "plan": "pro",
+      "account_age_months": 1,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["technical"],
+    "expected_routing": ["technical_agent"]
+  },
+  {
+    "ticket_text": "The mobile app on iOS keeps crashing when I try to open any issue with an attachment. I'm on iPhone 15 Pro running iOS 17.4 and app version 3.2.1. This started happening after yesterday's update.",
+    "customer_profile": {
+      "customer_id": "cus_015",
+      "name": "Aisha Johnson",
+      "email": "aisha@nomadworks.com",
+      "plan": "starter",
+      "account_age_months": 8,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["technical"],
+    "expected_routing": ["technical_agent"]
+  },
+  {
+    "ticket_text": "Cycle analytics is showing incorrect data — it's reporting our average cycle time as 47 days when our actual completed cycles this sprint averaged 6 days. The chart is also not updating even though we closed 12 issues today.",
+    "customer_profile": {
+      "customer_id": "cus_016",
+      "name": "Ben Hartley",
+      "email": "ben@craftpm.io",
+      "plan": "pro",
+      "account_age_months": 16,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["technical"],
+    "expected_routing": ["technical_agent"]
+  },
+  {
+    "ticket_text": "I can't log into my account. I reset my password twice and get the confirmation email, but when I enter the new password it still says 'Invalid credentials'. This has been going on for 2 days and I'm completely locked out.",
+    "customer_profile": {
+      "customer_id": "cus_017",
+      "name": "Sandra Mills",
+      "email": "sandra@mills.biz",
+      "plan": "pro",
+      "account_age_months": 12,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["account"],
+    "expected_routing": ["account_agent"]
+  },
+  {
+    "ticket_text": "I need to transfer my personal account to a new email address. I'm changing companies and my current account is tied to my old work email which I'll lose access to at the end of the month.",
+    "customer_profile": {
+      "customer_id": "cus_018",
+      "name": "Patrick Dunn",
+      "email": "patrick@oldcorp.com",
+      "plan": "pro",
+      "account_age_months": 25,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["account"],
+    "expected_routing": ["account_agent"]
+  },
+  {
+    "ticket_text": "I want to cancel my subscription. We evaluated the product for 3 months and decided to go a different direction. Please cancel at the end of the current billing period and confirm via email.",
+    "customer_profile": {
+      "customer_id": "cus_019",
+      "name": "Layla Hassan",
+      "email": "layla@zenflow.co",
+      "plan": "starter",
+      "account_age_months": 3,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["account"],
+    "expected_routing": ["account_agent"]
+  },
+  {
+    "ticket_text": "We need to add 5 more seats to our Pro plan. We're growing the engineering team and need to onboard new members this week. Can you add the seats and let me know if there's a prorated charge for this month?",
+    "customer_profile": {
+      "customer_id": "cus_020",
+      "name": "Chris Novak",
+      "email": "chris@buildhive.io",
+      "plan": "pro",
+      "account_age_months": 10,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["account"],
+    "expected_routing": ["account_agent"]
+  },
+  {
+    "ticket_text": "One of our admins left the company and we need to transfer workspace ownership to me. The previous owner's account is already deactivated by IT so he can't do the transfer himself. Is there a way to do this manually?",
+    "customer_profile": {
+      "customer_id": "cus_021",
+      "name": "Mia Thornton",
+      "email": "mia@thorntongroup.com",
+      "plan": "pro",
+      "account_age_months": 19,
+      "tier": "high_value",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["account"],
+    "expected_routing": ["account_agent"]
+  },
+  {
+    "ticket_text": "I was charged $299 this month AND my Zapier integration broke at the same time. I think the plan upgrade that happened automatically somehow messed up the API key. Can someone look at both the billing error and restore the integration?",
+    "customer_profile": {
+      "customer_id": "cus_022",
+      "name": "Derek Simmons",
+      "email": "derek@simstudio.co",
+      "plan": "pro",
+      "account_age_months": 13,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["billing", "technical"],
+    "expected_routing": ["billing_agent", "technical_agent"]
+  },
+  {
+    "ticket_text": "Two problems: 1) Our webhook endpoint stopped receiving events since last Tuesday — we're getting 0 deliveries. 2) We need to add 3 seats but the 'Manage Members' page throws a JS error when we try to invite anyone. Both are blocking us.",
+    "customer_profile": {
+      "customer_id": "cus_023",
+      "name": "Fiona Walsh",
+      "email": "fiona@walshtech.ie",
+      "plan": "pro",
+      "account_age_months": 17,
+      "tier": "high_value",
+      "open_ticket_count": 1
+    },
+    "expected_intents": ["technical", "account"],
+    "expected_routing": ["technical_agent", "account_agent"]
+  },
+  {
+    "ticket_text": "I need help with two things: (1) We've been double charged for the last two months and need refunds totaling $198. (2) I also need to upgrade our plan from Pro to Enterprise — I've been trying to do it from the settings page but the 'Upgrade' button just spins and does nothing.",
+    "customer_profile": {
+      "customer_id": "cus_024",
+      "name": "Ryan Park",
+      "email": "ryan@park-ventures.com",
+      "plan": "pro",
+      "account_age_months": 21,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["billing", "account"],
+    "expected_routing": ["billing_agent", "account_agent"]
+  },
+  {
+    "ticket_text": "Several issues at once: my account got logged out and I can't log back in, the last invoice is wrong (charged $149 instead of $49), and the data export I scheduled two days ago never ran. I need all three resolved urgently.",
+    "customer_profile": {
+      "customer_id": "cus_025",
+      "name": "Elena Voss",
+      "email": "elena@vossdigital.de",
+      "plan": "pro",
+      "account_age_months": 9,
+      "tier": "standard",
+      "open_ticket_count": 2
+    },
+    "expected_intents": ["billing", "technical", "account"],
+    "expected_routing": ["billing_agent", "technical_agent", "account_agent"]
+  },
+  {
+    "ticket_text": "Something isn't right with my account. I'm not sure what happened but things look different than before. Can someone help me figure out what's going on?",
+    "customer_profile": {
+      "customer_id": "cus_026",
+      "name": "Glen Patterson",
+      "email": "glen@patterson.net",
+      "plan": "free",
+      "account_age_months": 2,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["general"],
+    "expected_routing": ["escalation_agent"]
+  },
+  {
+    "ticket_text": "Hi, I need some assistance. I've been having issues and it's been really frustrating. Please get back to me as soon as possible.",
+    "customer_profile": {
+      "customer_id": "cus_027",
+      "name": "Tina Rhodes",
+      "email": "tina@rhodesco.com",
+      "plan": "starter",
+      "account_age_months": 4,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["general"],
+    "expected_routing": ["escalation_agent"]
+  },
+  {
+    "ticket_text": "We're experiencing some challenges with the platform and would like to discuss them. It's related to our usage but I'm not sure of the best way to describe it technically. Could someone from your team reach out?",
+    "customer_profile": {
+      "customer_id": "cus_028",
+      "name": "Omar Hussain",
+      "email": "omar@hussain-tech.com",
+      "plan": "pro",
+      "account_age_months": 6,
+      "tier": "standard",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["general"],
+    "expected_routing": ["escalation_agent"]
+  },
+  {
+    "ticket_text": "We are a large financial institution using your platform for critical internal tooling. Our entire engineering org of 200 people is affected — the workspace is completely down and no one can access any projects. This is a P0 incident for us. We need immediate escalation to your engineering team.",
+    "customer_profile": {
+      "customer_id": "cus_029",
+      "name": "Victoria Sterling",
+      "email": "victoria@sterlingbank.com",
+      "plan": "enterprise",
+      "account_age_months": 36,
+      "tier": "enterprise",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["technical"],
+    "expected_routing": ["escalation_agent"]
+  },
+  {
+    "ticket_text": "Our contract is up for renewal next month and we'd like to discuss pricing adjustments and add-on features before signing. We need to schedule a call with your enterprise team this week.",
+    "customer_profile": {
+      "customer_id": "cus_030",
+      "name": "Richard Okoro",
+      "email": "richard@globalops.enterprise",
+      "plan": "enterprise",
+      "account_age_months": 24,
+      "tier": "enterprise",
+      "open_ticket_count": 0
+    },
+    "expected_intents": ["billing"],
+    "expected_routing": ["escalation_agent"]
+  }
+]
