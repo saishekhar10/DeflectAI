@@ -8,6 +8,7 @@ a partial state dict with updated fields.
 import os
 
 from dotenv import load_dotenv
+from langsmith import traceable
 from supabase import create_client
 
 load_dotenv()
@@ -87,38 +88,43 @@ def write_to_human_queue(escalation_output: EscalationOutput, customer_id: str) 
 # Graph nodes
 # ---------------------------------------------------------------------------
 
+@traceable(name="triage-node", tags=["node"])
 def triage_node(state: GraphState) -> dict:
     from backend.models.schemas import TriageInput
 
     profile = _profile_from_dict(state["customer_profile"])
     result = triage(TriageInput(ticket_text=state["ticket_text"], customer_profile=profile))
-    return {"triage_output": result.model_dump()}
+    return {"triage_output": result.model_dump(), "agents_used": ["triage_agent"]}
 
 
+@traceable(name="billing-node", tags=["node"])
 def billing_node(state: GraphState) -> dict:
     result = run_billing_agent(
         ticket_text=state["ticket_text"],
         customer_id=state["customer_id"],
     )
-    return {"billing_output": result.model_dump()}
+    return {"billing_output": result.model_dump(), "agents_used": ["billing_agent"]}
 
 
+@traceable(name="technical-node", tags=["node"])
 def technical_node(state: GraphState) -> dict:
     result = run_technical_agent(
         ticket_text=state["ticket_text"],
         customer_id=state["customer_id"],
     )
-    return {"technical_output": result.model_dump()}
+    return {"technical_output": result.model_dump(), "agents_used": ["technical_agent"]}
 
 
+@traceable(name="account-node", tags=["node"])
 def account_node(state: GraphState) -> dict:
     result = run_account_agent(
         ticket_text=state["ticket_text"],
         customer_id=state["customer_id"],
     )
-    return {"account_output": result.model_dump()}
+    return {"account_output": result.model_dump(), "agents_used": ["account_agent"]}
 
 
+@traceable(name="escalation-node", tags=["node"])
 def escalation_node(state: GraphState) -> dict:
     agent_outputs = _collect_agent_outputs(state)
     result = run_escalation_agent(
@@ -126,9 +132,10 @@ def escalation_node(state: GraphState) -> dict:
         customer_profile=state["customer_profile"],
         agent_outputs=agent_outputs,
     )
-    return {"escalation_output": result.model_dump()}
+    return {"escalation_output": result.model_dump(), "agents_used": ["escalation_agent"]}
 
 
+@traceable(name="synthesis-node", tags=["node"])
 def synthesis_node(state: GraphState) -> dict:
     agent_outputs = _collect_agent_outputs(state)
     # Remove triage from synthesis inputs — only specialist drafts needed
@@ -141,9 +148,11 @@ def synthesis_node(state: GraphState) -> dict:
         "synthesis_output": result.model_dump(),
         "final_response": result.final_response,
         "resolution_type": result.resolution_type,
+        "agents_used": ["synthesis_agent"],
     }
 
 
+@traceable(name="human-queue-node", tags=["node"])
 def human_queue_node(state: GraphState) -> dict:
     escalation_data = state["escalation_output"]
     escalation = EscalationOutput(**escalation_data)

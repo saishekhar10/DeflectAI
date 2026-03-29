@@ -1,4 +1,7 @@
-from typing import TypedDict, Optional
+from __future__ import annotations
+
+import operator
+from typing import Annotated, TypedDict, Optional
 
 
 class GraphState(TypedDict):
@@ -21,3 +24,7 @@ class GraphState(TypedDict):
 
     final_response: str
     resolution_type: str
+
+    # Accumulated list of agents that ran — uses operator.add reducer so parallel
+    # specialist nodes (billing + technical) can both append without overwriting.
+    agents_used: Annotated[list[str], operator.add]

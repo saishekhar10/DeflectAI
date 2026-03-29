@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "ticket_text": "I was charged $299 this month but I thought my downgrade to the Starter plan had already taken effect. My dashboard still shows Pro. Can you check whether the plan change actually went through and adjust my bill accordingly?",
+    "customer_id": "cus_001",
+    "expected_resolution_type": "resolved",
+    "expected_agents_used": ["billing_agent", "synthesis_agent"]
+  },
+  {
+    "id": 2,
+    "ticket_text": "Our GitHub integration stopped syncing commits two days ago. None of our pull requests are linking to issues anymore and I've tried revoking and re-authorizing the OAuth connection twice. The webhook delivery log shows 401 errors on every attempt.",
+    "customer_id": "cus_001",
+    "expected_resolution_type": "resolved",
+    "expected_agents_used": ["technical_agent", "synthesis_agent"]
+  },
+  {
+    "id": 3,
+    "ticket_text": "I just noticed two separate $49 charges on my credit card statement from this month — both dated the same day. It looks like I was billed twice for my subscription. Can you refund the duplicate charge?",
+    "customer_id": "cus_002",
+    "expected_resolution_type": "resolved",
+    "expected_agents_used": ["billing_agent", "synthesis_agent"]
+  },
+  {
+    "id": 4,
+    "ticket_text": "I need to cancel my subscription right away. Please process the cancellation as soon as possible and let me know if I'm eligible for a prorated refund for the remainder of the month.",
+    "customer_id": "cus_001",
+    "expected_resolution_type": "escalated",
+    "expected_agents_used": ["account_agent", "escalation_agent"]
+  },
+  {
+    "id": 5,
+    "ticket_text": "We need to discuss our enterprise contract terms and get clarity on the SLA guarantees included in our current agreement. We also have some questions about adding custom SSO configuration for our organization.",
+    "customer_id": "cus_005",
+    "expected_resolution_type": "escalated",
+    "expected_agents_used": ["escalation_agent"]
+  },
+  {
+    "id": 6,
+    "ticket_text": "How do I turn off the daily digest email notifications? I've been getting them every morning and I can't find the toggle in my account settings. I only want to receive notifications for direct mentions.",
+    "customer_id": "cus_002",
+    "expected_resolution_type": "resolved",
+    "expected_agents_used": ["technical_agent", "synthesis_agent"]
+  },
+  {
+    "id": 7,
+    "ticket_text": "We've been growing quickly and our team has outgrown the Pro plan limits. I'd like to upgrade to the Enterprise plan. Can you walk me through what's included and get the upgrade process started?",
+    "customer_id": "cus_003",
+    "expected_resolution_type": "resolved",
+    "expected_agents_used": ["account_agent", "synthesis_agent"]
+  },
+  {
+    "id": 8,
+    "ticket_text": "Two things came up at the same time: first, I was charged the full Pro rate this month even though I was expecting a promotional discount to apply. Second, our Zapier integration has been failing since yesterday — it keeps returning a 500 error when trying to create new records. Can you look into both?",
+    "customer_id": "cus_001",
+    "expected_resolution_type": "resolved",
+    "expected_agents_used": ["billing_agent", "technical_agent", "synthesis_agent"]
+  },
+  {
+    "id": 9,
+    "ticket_text": "Something seems off with my account. Not sure how to describe it exactly. Can you take a look and let me know if anything stands out?",
+    "customer_id": "cus_002",
+    "expected_resolution_type": "escalated",
+    "expected_agents_used": ["escalation_agent"]
+  },
+  {
+    "id": 10,
+    "ticket_text": "I need a full refund of $299 for my last invoice. The platform was completely unusable for the entire billing period due to repeated outages and I was unable to do any work. I expect this to be resolved immediately.",
+    "customer_id": "cus_003",
+    "expected_resolution_type": "escalated",
+    "expected_agents_used": ["billing_agent", "escalation_agent"]
+  }
+]

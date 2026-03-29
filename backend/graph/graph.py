@@ -6,6 +6,12 @@ Exposes:
   run_graph()   — main entry point for processing support tickets
 """
 
+import os
+import time
+
+from dotenv import load_dotenv
+from langsmith import traceable
+from langsmith.run_helpers import get_current_run_tree
 from langgraph.graph import StateGraph, END
 from langgraph.types import Send
 
@@ -121,11 +127,17 @@ _builder.add_edge("synthesis_node", END)
 # Compiled graph — expose for LangSmith tracing
 deflect_graph = _builder.compile()
 
+# LangSmith tracing setup — must run after load_dotenv() populates the env
+load_dotenv()
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_PROJECT"] = os.environ.get("LANGSMITH_PROJECT", "deflect-ai")
+
 
 # ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
 
+@traceable(name="deflect-ai-graph", tags=["production"])
 def run_graph(ticket_text: str, customer_id: str, customer_profile: dict) -> dict:
     """
     Main entry point for processing a support ticket through the Deflect AI graph.
@@ -140,6 +152,8 @@ def run_graph(ticket_text: str, customer_id: str, customer_profile: dict) -> dic
         The final graph state as a dict, including:
           - final_response: customer-facing reply
           - resolution_type: "resolved" or "escalated"
+          - agents_used: list of agent names that ran
+          - resolution_time_ms: wall-clock time for the full graph run
           - escalation_output: set if ticket was escalated (contains ticket_id)
           - billing_output / technical_output / account_output: set if those agents ran
     """
@@ -155,6 +169,25 @@ def run_graph(ticket_text: str, customer_id: str, customer_profile: dict) -> dic
         "synthesis_output": None,
         "final_response": "",
         "resolution_type": "",
+        "agents_used": [],
     }
+    start_time = time.time()
     result = deflect_graph.invoke(initial_state)
-    return dict(result)
+    resolution_time_ms = int((time.time() - start_time) * 1000)
+
+    # Inject per-run metadata into the active LangSmith trace
+    rt = get_current_run_tree()
+    if rt:
+        triage_out = result.get("triage_output") or {}
+        rt.extra = rt.extra or {}
+        rt.extra["metadata"] = {
+            "customer_id": customer_id,
+            "customer_tier": customer_profile.get("tier", "standard"),
+            "ticket_intent_count": len(triage_out.get("intents", [])),
+            "escalated": result.get("resolution_type") == "escalated",
+            "resolution_time_ms": resolution_time_ms,
+        }
+
+    output = dict(result)
+    output["resolution_time_ms"] = resolution_time_ms
+    return output
