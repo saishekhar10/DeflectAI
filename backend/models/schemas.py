@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Literal
+from typing import Literal, Optional
 
 
 class CustomerProfile(BaseModel):
@@ -24,3 +24,41 @@ class TriageOutput(BaseModel):
     urgency: Literal["low", "medium", "high"]
     reasoning: str  # brief explanation of routing decision
     escalate_immediately: bool  # True if enterprise tier or confidence < 0.6
+
+
+class BillingOutput(BaseModel):
+    finding: str
+    action_taken: str  # e.g. "applied $50 credit" or "no action taken" or "escalated"
+    response_draft: str
+    escalate: bool
+    escalation_reason: str = ""
+
+
+class TechnicalOutput(BaseModel):
+    diagnosis: str
+    source_docs: list[str]  # list of source_urls returned by RAG
+    response_draft: str
+    escalate: bool
+    escalation_reason: str = ""
+
+
+class AccountOutput(BaseModel):
+    action_taken: str
+    response_draft: str
+    escalate: bool
+    escalation_reason: str = ""
+
+
+class EscalationOutput(BaseModel):
+    summary: str
+    what_was_tried: str
+    priority: Literal["low", "medium", "high"]
+    customer_tier: str
+    ticket_id: str
+    original_ticket: str
+
+
+class SynthesisOutput(BaseModel):
+    final_response: str
+    agents_used: list[str]
+    resolution_type: Literal["resolved", "escalated"]
