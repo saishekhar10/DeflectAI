@@ -62,3 +62,32 @@ class SynthesisOutput(BaseModel):
     final_response: str
     agents_used: list[str]
     resolution_type: Literal["resolved", "escalated"]
+
+
+class TicketRequest(BaseModel):
+    ticket_text: str
+    customer_id: str
+
+
+class TicketResponse(BaseModel):
+    final_response: str
+    resolution_type: str
+    agents_used: list[str]
+    ticket_id: str
+    resolution_time_ms: int
+
+
+class HumanQueueItem(BaseModel):
+    ticket_id: str
+    customer_id: str
+    customer_tier: str
+    priority: str
+    summary: str
+    what_was_tried: str
+    original_ticket: str
+    status: str
+    created_at: str
+
+
+class StatusUpdate(BaseModel):
+    status: str
