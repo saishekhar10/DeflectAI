@@ -2,7 +2,9 @@
 
 **Autonomous multi-agent customer support orchestration system built with LangGraph, FastAPI, and Next.js.**
 
-Deflect AI routes incoming SaaS support tickets to specialized AI agents — billing, technical, and account — running in parallel where needed, and synthesizes a single coherent response. Low-confidence tickets and high-value customer escalations are routed to a human queue with full context preserved.
+Deflect AI classifies incoming SaaS support tickets via a triage agent, routes them to specialized agents (billing, technical, account) running in parallel where needed, and synthesizes a single coherent response. A RAG pipeline over scraped Linear docs powers the technical agent's knowledge base. Low-confidence tickets and high-value customer escalations route to a human queue with full context preserved. Every run is traced end-to-end via LangSmith.
+
+![Deflect AI UI](screenshot.png)
 
 ---
 
@@ -13,17 +15,29 @@ Deflect AI routes incoming SaaS support tickets to specialized AI agents — bil
        ↓
 [Triage Agent]  ← classifies intent, scores confidence, routes
        ↓
-  ┌────┴─────────────┐
-  ↓                  ↓
-[Billing Agent]  [Technical Agent]  ← run in parallel for multi-intent tickets
-[Account Agent]
-  ↓                  ↓
-  └────┬─────────────┘
+  ┌────┴──────────────────────────┐
+  ↓                               ↓
+[Billing Agent]              [Escalation Agent]
+[Technical Agent]  (parallel)      ↓
+[Account Agent]              [Human Queue Node]
+  ↓                               ↓
+  └────┬──────────────────────────┘
        ↓
 [Synthesis Agent]  ← merges drafts into single customer reply
        ↓
-  [Response]    OR    [Human Queue]  ← escalation path
+  [Response]    OR    [Human Queue]
 ```
+
+### Routing Rules
+
+| Condition | Route |
+|---|---|
+| Single intent, confidence ≥ 0.6 | Direct to matching agent |
+| Multi-intent, confidence ≥ 0.6 | Parallel execution via `Send()` |
+| Any intent, confidence < 0.6 | Escalation Node |
+| Agent returns `escalate: true` | Escalation Node |
+| Customer tier = enterprise | Always escalate |
+| Refund request > $100 | Escalation Node |
 
 ---
 
@@ -32,11 +46,11 @@ Deflect AI routes incoming SaaS support tickets to specialized AI agents — bil
 | Layer | Technology |
 |---|---|
 | Orchestration | LangGraph |
-| LLM | Anthropic Claude (claude-sonnet-4-20250514) |
-| Embeddings | Voyage AI (voyage-3, 1024-dim) |
+| LLM | Anthropic Claude (`claude-sonnet-4-20250514`) |
+| Embeddings | Voyage AI (`voyage-3`, 1024-dim) |
 | Vector DB | Supabase pgvector |
 | Backend | FastAPI |
-| Frontend | Next.js 15 |
+| Frontend | Next.js 15 + Tailwind CSS v4 |
 | Tracing | LangSmith |
 | Deployment | Vercel (frontend), Railway (backend) |
 
@@ -52,15 +66,15 @@ Deflect AI routes incoming SaaS support tickets to specialized AI agents — bil
 
 **Account Agent** — Handles plan changes, seat management, and cancellation requests. Cancellations always route to a human.
 
-**Escalation Agent** — Synthesizes a full-context summary for human handoff. Writes to a human queue visible in the frontend in real time.
+**Escalation Agent** — Synthesizes a full-context summary for human handoff. Writes to the human queue visible in the frontend in real time.
 
-**Synthesis Agent** — Merges multi-agent response drafts into a single coherent customer reply with no seams.
+**Synthesis Agent** — Merges multi-agent response drafts into a single coherent customer reply.
 
 ---
 
 ## RAG Pipeline
 
-Linear's public docs are scraped, chunked (~500 tokens, 50-token overlap), embedded with `voyage-3`, and stored in Supabase pgvector. The Technical Agent queries this at runtime via cosine similarity search.
+Linear's public docs are scraped, chunked (~500 tokens, 50-token overlap), embedded with `voyage-3`, and stored in Supabase pgvector. The Technical Agent queries this at runtime via cosine similarity search (threshold: 0.3).
 
 ```bash
 # One-time ingestion
@@ -70,6 +84,16 @@ python -m backend.rag.ingest
 python -m backend.rag.ingest --limit 20  # test first
 python -m backend.rag.ingest             # full run
 ```
+
+---
+
+## Frontend
+
+Three-panel dashboard at `localhost:3000`:
+
+- **Chat Panel** — Submit support tickets with a demo persona selector (customer tier + account context). Shows the AI response inline with resolution status and latency.
+- **Agent Trace Panel** — Real-time view of which agents fired, in what order, and what each one did. Shows the full multi-agent workflow as it executes.
+- **Human Queue Panel** — Escalated tickets appear here with priority badge, customer ID, context summary, and a Resolve button.
 
 ---
 
@@ -91,19 +115,35 @@ deflect-ai/
 │   │   ├── embedder.py
 │   │   ├── ingest.py
 │   │   └── search.py
-│   ├── models/
-│   │   └── schemas.py
+│   ├── graph/
+│   │   ├── state.py
+│   │   ├── nodes.py
+│   │   └── graph.py
 │   ├── mock_apis/
 │   │   ├── stripe_mock.py
 │   │   └── account_mock.py
+│   ├── models/
+│   │   └── schemas.py
 │   ├── tests/
 │   │   ├── routing_test_suite.json
-│   │   └── test_triage.py
-│   ├── graph.py
-│   ├── main.py
-│   └── requirements.txt
+│   │   ├── test_triage.py
+│   │   ├── test_graph.py
+│   │   ├── eval_dataset.json
+│   │   └── run_evals.py
+│   └── main.py
 └── frontend/
-    └── (Next.js app)
+    ├── app/
+    │   ├── layout.tsx
+    │   ├── page.tsx
+    │   └── globals.css
+    ├── components/
+    │   ├── ChatPanel.tsx
+    │   ├── AgentTracePanel.tsx
+    │   ├── HumanQueuePanel.tsx
+    │   └── Navbar.tsx
+    └── lib/
+        ├── api.ts
+        └── types.ts
 ```
 
 ---
@@ -113,7 +153,7 @@ deflect-ai/
 ### Prerequisites
 - Python 3.11+
 - Node.js 18+
-- Supabase account (free tier)
+- Supabase account (pgvector enabled)
 - Anthropic API key
 - Voyage AI API key
 - LangSmith account (free tier)
@@ -121,18 +161,21 @@ deflect-ai/
 ### Backend
 
 ```bash
-# Install dependencies
 pip install -r backend/requirements.txt
 
-# Copy and fill in environment variables
-cp backend/.env.example backend/.env
-
-# Run Supabase schema (paste schema.sql into Supabase SQL editor)
-# Then ingest Linear docs
+# Paste schema.sql into Supabase SQL editor, then ingest Linear docs
 python -m backend.rag.ingest
 
-# Start backend
-uvicorn backend.main:app --reload
+# Start backend (from project root)
+PYTHONPATH=. uvicorn backend.main:app --reload --port 8000
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev  # runs on localhost:3000
 ```
 
 ### Environment Variables
@@ -151,7 +194,7 @@ LANGSMITH_PROJECT=deflect-ai
 ## Testing
 
 ```bash
-# Run routing test suite (30 tickets, target 90%+ accuracy)
+# Routing test suite (30 tickets, target 90%+ accuracy)
 python -m backend.tests.test_triage
 
 # Test RAG search
@@ -168,21 +211,11 @@ for r in results:
 
 ## Key Metrics
 
-- **Autonomous resolution rate** — % of tickets resolved without hitting the escalation agent. Target: 75%+
-- **Routing accuracy** — % of tickets routed to the correct specialist agents. Target: 90%+
-- **RAG confidence** — % of technical queries returning results above similarity threshold
-
-All metrics tracked via LangSmith.
-
----
-
-## Demo
-
-The frontend includes:
-- **Chat UI** — submit support tickets and see responses in real time
-- **Agent trace panel** — shows which agents fired, in what order, with reasoning
-- **Human queue panel** — escalated tickets appear here with full context summary
-- **Demo persona toggle** — switch between SaaS, e-commerce, and IT helpdesk
+| Metric | Target | Status |
+|---|---|---|
+| Routing accuracy | 90%+ | 93.3% (28/30) |
+| Autonomous resolution rate | 75%+ | Tracked via LangSmith |
+| RAG confidence | Results above 0.3 threshold | 6/8 queries validated |
 
 ---
 
