@@ -1,4 +1,4 @@
-![deflect_ai_architecture1](https://github.com/user-attachments/assets/08b05734-bf1c-47c5-8ce8-d80bb4d41a63)# Deflect AI
+# Deflect AI
 
 **Autonomous multi-agent customer support orchestration system built with LangGraph, FastAPI, and Next.js.**
 
