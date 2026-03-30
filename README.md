@@ -218,8 +218,4 @@ for r in results:
 | Autonomous resolution rate | 75%+ | Tracked via LangSmith |
 | RAG confidence | Results above 0.3 threshold | 6/8 queries validated |
 
----
 
-## License
-
-MIT
