@@ -1,10 +1,13 @@
-# Deflect AI
+![deflect_ai_architecture1](https://github.com/user-attachments/assets/08b05734-bf1c-47c5-8ce8-d80bb4d41a63)# Deflect AI
 
 **Autonomous multi-agent customer support orchestration system built with LangGraph, FastAPI, and Next.js.**
 
 Deflect AI classifies incoming SaaS support tickets via a triage agent, routes them to specialized agents (billing, technical, account) running in parallel where needed, and synthesizes a single coherent response. A RAG pipeline over scraped Linear docs powers the technical agent's knowledge base. Low-confidence tickets and high-value customer escalations route to a human queue with full context preserved. Every run is traced end-to-end via LangSmith.
 
 <img width="1675" height="899" alt="Screenshot 2026-03-29 at 8 33 23 PM" src="https://github.com/user-attachments/assets/dfd57f99-dd9d-4f4a-be1c-21469516d39e" />
+
+<img width="680" height="570" alt="deflect_ai_architecture1" src="https://github.com/user-attachments/assets/97482824-f2cc-44b3-b3ad-d8ae5a20d88b" />
+
 
 
 ---
